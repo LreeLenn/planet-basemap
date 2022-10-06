@@ -7,13 +7,10 @@ import sys
 import csv
 from shapely.geometry import shape
 from planet.api.auth import find_api_key
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
-planethome = os.path.dirname(os.path.realpath(__file__))
 
-idmatch=[]
 
 # Create an empty geojson template
-temp = {"coordinates":[], "type":"Polygon"}
+temp = {"coordinates": [], "type": "Polygon"}
 try:
     PL_API_KEY = find_api_key()
     os.environ['PLANET_API_KEY'] = find_api_key()
@@ -22,20 +19,20 @@ except:
     sys.exit()
 SESSION = requests.Session()
 SESSION.auth = (PL_API_KEY, '')
-CAS_URL = 'https://api.planet.com/mosaic/experimental/mosaics/'
+PL_API_MOSAIC_URL = 'https://api.planet.com/basemaps/v1/mosaics/'
 
 
 # Function to download the geotiffs
-def download(ids,names, idlist, infile, coverage, local):
+def download(ids, names, idlist, infile, coverage, local):
     if idlist is None and names is not None:
-        downloader(ids,names, infile, coverage, local)
+        downloader(ids, names, infile, coverage, local)
     elif idlist is not None:
         with open(idlist) as csvfile:
-            reader=csv.DictReader(csvfile)
+            reader = csv.DictReader(csvfile)
             for row in reader:
                 print('')
-                print('Processing: '+str(row['name']))
-                downloader(str(row['id']),str(row['name']),infile, coverage, local)
+                print('Processing: ' + str(row['name']))
+                downloader(str(row['id']), str(row['name']), infile, coverage, local)
 
 #Check running orders
 def hpage(page,names,coverage, local):
@@ -93,19 +90,20 @@ def hpage(page,names,coverage, local):
 
 
 # Get item id from item name
-def handle_page(names,response):
+def handle_page(names, response):
     for items in response['mosaics']:
-        if items['name']==names:
+        if items['name'] == names:
             return items['id']
 
 # Downloader
 def downloader(ids,names, infile, coverage, local):
+    idmatch = []
     if names is None and ids is not None:
         ids=ids
     elif names is not None and ids is None:
         resp=SESSION.get('https://api.planet.com/basemaps/v1/mosaics')
         response=resp.json()
-        ids=handle_page(names,response)
+        ids=handle_page(names, response)
         idmatch.append(ids)
         try:
             while response['_links'].get('_next') is not None:
@@ -142,10 +140,10 @@ def downloader(ids,names, infile, coverage, local):
     gmain = shape(temp)
     gmainbound = (','.join(str(v) for v in list(gmain.bounds)))
     gboundlist = gmainbound.split(',')
-    url = CAS_URL \
-        + str(ids) + '/quads?bbox=' + str(gboundlist[0]) \
-        + '%2C' + str(gboundlist[1]) + '%2C' + str(gboundlist[2]) \
-        + '%2C' + str(gboundlist[3])
+    url = PL_API_MOSAIC_URL \
+          + str(ids) + '/quads?bbox=' + str(gboundlist[0]) \
+          + '%2C' + str(gboundlist[1]) + '%2C' + str(gboundlist[2]) \
+          + '%2C' + str(gboundlist[3])
     #print(url)
     main = SESSION.get(url)
     if main.status_code == 200:

@@ -1,9 +1,5 @@
-import sys
-import os
-import sys
 import setuptools
 from setuptools import find_packages
-from setuptools.command.test import test as TestCommand
 from distutils.version import StrictVersion
 from setuptools import __version__ as setuptools_version
 
@@ -23,14 +19,13 @@ setuptools.setup(
     package_data={'mosaic': ['ids.csv','idmetadata.csv']},
     url='https://github.com/samapriya/Planet-Mosaic-Quads-Download-CLI',
     install_requires=['requests>=2.19.1',
-    'DateTimeRange>=0.5.5',
     'planet>=1.2.1',
     'psutil>=5.4.5',
     'retrying>=1.3.3',
     'pySmartDL==1.2.5;python_version<"3.4"',
     'pySmartDL>=1.3.1;python_version>"3.4"',
     'shapely; platform_system != "Windows"',
-    'geopandas>=0.4.0; platform_system != "Windows"',
+    'geopandas>=0.11.1; platform_system != "Windows"',
     'fiona>=1.8.6; platform_system != "Windows"',
     'pypiwin32; platform_system == "Windows"','pywin32; platform_system == "Windows"'],
     license='Apache 2.0',
