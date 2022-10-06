@@ -2,9 +2,15 @@
 [![PyPI version](https://badge.fury.io/py/pbasemap.svg)](https://badge.fury.io/py/pbasemap)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3255274.svg)](https://doi.org/10.5281/zenodo.3255274)
 
-Planet creates global monthly mosaics apart from creating mosaics at different frequencies, monthly mosaics are of interest to a lot of people who would like to do a consistent time series analysis using these mosaics and would like to apply them to an existing analytical pipeline. I created this tool to allow you pass single or multiple geometries in a folder for the tool to find the mosaic quads and then process and download it. For now the geometry is passed as a geojson file, but I have included a tool for you to convert any shapefile into geojson files so you can use this tool. In the future I will add support for kml and json files as well.
+Planet creates global monthly mosaics apart from creating mosaics at different frequencies, monthly 
+mosaics are of interest to a lot of people who would like to do a consistent time series analysis using 
+these mosaics and would like to apply them to an existing analytical pipeline. 
 
-You can cite the tool using the following or from [this link](https://zenodo.org/record/3255274)
+Thus tool allow listing and download Mosaic Quads for given geometries. 
+All [GDAL vector formats](https://gdal.org/drivers/vector/index.html) are supported.
+
+
+Note that this repo is a fork of the [following project](https://zenodo.org/record/3255274) you can cite it as:
 
 ```
 Samapriya Roy. (2019, June 25). samapriya/Planet-Mosaic-Quads-Download-CLI: Planet Mosaic Quads Download CLI (Version 0.1.0). Zenodo.
@@ -130,7 +136,7 @@ usage: pbasemap.py mpdownload [-h] [--geometry GEOMETRY] [--local LOCAL]
 
 optional arguments:
   -h, --help           show this help message and exit
-  --geometry GEOMETRY  Choose a geometry file supports GeoJSON, KML
+  --geometry GEOMETRY  Choose a geometry file supports GeoJSON, KML, Shape, etc.
   --local LOCAL        Local folder to download images
 
 Optional named arguments:
@@ -139,20 +145,15 @@ Optional named arguments:
   --idlist IDLIST      Mosaic list csvfile
 ```
 
-### shape to geojson
-This tool allows you to convert from  a folder with multiple shapefiles to a folder with geojson that can then be used with the tool. It makes use of geopandas and reprojects your shapefile to make it compatible while passing onto the API for search and download.
-
-```
-usage: pbasemap shp2geojson [-h] [--source SOURCE] [--destination DESTINATION]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --source SOURCE       Choose Source Folder
-  --destination DESTINATION
-                        Choose Destination Folder
-```
 
 ## Changelog
+
+### v1.0.0
+
+- Added native support for almost any vector-based format (same as GeoPandas).
+- Download only intersecting quads (if specified).
+- One-step download.
+- Drop multipart downloader.
 
 ### v0.1.0
 
