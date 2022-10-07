@@ -44,7 +44,7 @@ setuptools.setup(
     description='Tool to download Planet Monthly Mosaic Quads',
     entry_points={
         'console_scripts': [
-            'plane_basemap=pbasemap.plane_basemap:main',
+            'planet_basemap=pbasemap.planet_basemap:main',
         ],
     },
 )

@@ -28,6 +28,7 @@ http://doi.org/10.5281/zenodo.3255274
 
 
 ## Table of contents
+
 * [Installation](#installation)
 * [Getting started](#getting-started)
 * [planet_basemap CLI tool](#planet_basemap CLI tool)
@@ -37,6 +38,7 @@ http://doi.org/10.5281/zenodo.3255274
 * [Python API](#python-usage)
 
 ## Installation
+
 ** Install Fiona and GDAL for windows using the whl files [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/)** if 
 there are any issues during installation.
 
@@ -91,7 +93,7 @@ running `python planet_basemap.py [arguments go here]`
 
 ## CLI tool
 
-The tool allows you to list and download basemap quads that instersect with area of interest, and have 
+The tool allows you to list and download basemap quads that intersect with area of interest, and have 
 controls such as date range and check for final coverage before download. The CLI also allows you to export 
 the mosaics list as needed and can handle GeoJSON and KML files, and includes a tool to convert shapefiles 
 to GeoJSON files for use with this tool.
