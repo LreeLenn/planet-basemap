@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 __copyright__ = """
 
     Copyright 2019 Samapriya Roy
@@ -17,13 +20,9 @@ __copyright__ = """
 """
 __license__ = "Apache 2.0"
 
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 import json
 import sys
 from shapely.geometry import shape
-from shapely.geometry import box
 
 #Create an empty geojson template
 temp={"coordinates":[],"type":"Polygon"}
@@ -39,9 +38,6 @@ def idl(infile):
             with open (infile) as aoi:
                 aoi_resp=json.load(aoi)
                 aoi_geom=aoi_resp['config'][0]['config']['coordinates']
-        elif infile.endswith('.kml'):
-            getcoord=kml2coord(infile)
-            aoi_geom=getcoord
     except Exception as e:
         print('Could not parse geometry')
         print(e)

@@ -4,8 +4,8 @@ import unittest
 
 from datetime import date
 
-from pbasemap.mosaic_download import download_aoi_file_mosaic_quads
-from pbasemap.mosaic_metadata import get_file_mosaic_quads_metadata
+from pbasemap.mosaic.download import download_aoi_file_mosaic_quads
+from pbasemap.mosaic.metadata import get_file_mosaic_quads_metadata
 
 CLEANUP = False
 
@@ -20,11 +20,11 @@ class TestMosaicMetadata(unittest.TestCase):
         self._test_environment()
         start_date = date(2022, 1, 1)
         end_date = date(2022, 3, 1)
-        mosaics = get_file_mosaic_quads_metadata('./data/test_aoi_01.geojson', start_date, end_date)
-        self.assertGreaterEqual(mosaics.shape[0], 50, "Missing mosaic metadata")
+        quads = get_file_mosaic_quads_metadata('./data/test_aoi_01.geojson', start_date, end_date)
+        self.assertGreaterEqual(quads.shape[0], 50, "Missing mosaic metadata")
         mosaics_intersect = get_file_mosaic_quads_metadata('./data/test_aoi_01.geojson',
                                                            start_date, end_date, intersect_exact=True)
-        self.assertGreater(mosaics.shape[0], mosaics_intersect.shape[0], "Intersecting quads should be less than bbox.")
+        self.assertGreater(quads.shape[0], mosaics_intersect.shape[0], "Intersecting quads should be less than bbox.")
 
     def test_aoi_download(self):
         self._test_environment()

@@ -7,9 +7,16 @@ Planet creates global monthly mosaics apart from creating mosaics at different f
 mosaics are of interest to a lot of people who would like to do a consistent time series analysis using 
 these mosaics and would like to apply them to an existing analytical pipeline. 
 
-Thus tool allow listing and download Mosaic Quads for given geometries. 
+This tool allows listing and download Mosaic Quads for given geometries. 
 All [GDAL vector formats](https://gdal.org/drivers/vector/index.html) are supported.
 
+As a result you can get all the quads for given geometry bounding box:
+
+![image](docs/screen-downloaded-quads-bounding-box.png)
+
+Or if you use `--intersec_exact` option all:
+
+![image](docs/screen-downloaded-quads-intersect-exact.png)
 
 Note that this repo is a fork of the [following project](https://zenodo.org/record/3255274) you can cite it as:
 
@@ -27,7 +34,7 @@ http://doi.org/10.5281/zenodo.3255274
     * [bounding box](#bounding-box)
     * [list](#list)
     * [download](#download)
-* [Python usage](#python-usage)
+* [Python API](#python-usage)
 
 ## Installation
 ** Install Fiona and GDAL for windows using the whl files [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/)** if 
@@ -105,8 +112,8 @@ optional arguments:
 
 ### list
 
-This tool exports the mosaics name, id that intersect with your bounding box for your geometry. This can then 
-be used to download the quads.
+This tool exports all quads that intersect with your geometry file. You can use any input and output geometry 
+[file format supported by GDAL](https://gdal.org/drivers/vector/index.html).
 
 ```
 usage: planet_basemap.py list [-h] --geometry GEOMETRY --start START --end END [--coverage COVERAGE] 
@@ -120,7 +127,7 @@ arguments:
   --end END            Choose End date in format YYYY-MM-DD
   --coverage COVERAGE  Optional. Choose minimum percentage coverage. Default: 0
   --intersect_exact    Optional. Filter quads that intersects with AOI. If not given quads for entire AOI bounding box are returned.
-  --output OUTPUT      Full path where you want your mosaic list exported
+  --output OUTPUT      Full path where you want your mosaic list exported.
   --api_key API_KEY    Planet API key. Also can be set as PL_API_KEY env var.
 
 ```
@@ -130,8 +137,8 @@ arguments:
 As the name suggests this downloads your mosaic to the local folder you specify, you can specify how much 
 coverage you want over your geometry and over the quad. So you may decide to only download those mosaic 
 quads that have coverage more than 90% by simply specifying ```--coverage 90``` in the arguments. 
-Once you create the list of mosaics that intersect with your geometry, you should be able to use the 
-idlist option to export them all.
+
+You can also download a list of mosaics get with the `list` option by using the `--list` argument.
 
 ```
 usage: planet_basemap.py download [-h] [--geometry GEOMETRY] [--list LIST] [--start START] [--end END] 
@@ -140,7 +147,7 @@ usage: planet_basemap.py download [-h] [--geometry GEOMETRY] [--list LIST] [--st
 
 options:
   -h, --help           show this help message and exit
-  --geometry GEOMETRY  Path to AOI geometry file (any supported by GDAL)
+  --geometry GEOMETRY  Path to AOI geometry file (any supported by GDAL like shapefile, GeoJSON, etc.)
   --list LIST          Mosaic list where results from list command where saved
   --start START        Choose Start date in format YYYY-MM-DD
   --end END            Choose End date in format YYYY-MM-DD
@@ -153,12 +160,31 @@ options:
 ```
 
 
-## Python usage
+## Python API
 
 You can also call directly base map mosaic quad list and download functions in you python code.
-Bellow you can find an example that lists and download quad data.
+Bellow you can find an example that lists and download quad data. For more documentation check the code.
 
+```python
+from datetime import date
+from pbasemap.mosaic.download import download_mosaic_quads
+from pbasemap.mosaic.metadata import get_file_mosaic_quads_metadata
 
+quads = get_file_mosaic_quads_metadata('./data/test_aoi_01.geojson', date(2022, 1, 1), date(2022, 3, 1))
+# Do some staff (e.g. filter) with your quads and then download
+down_paths = download_mosaic_quads(quads, './download')
+
+```
+
+Or just in one step:
+
+```python
+from datetime import date
+from pbasemap.mosaic.download import download_aoi_file_mosaic_quads
+
+down_files = download_aoi_file_mosaic_quads('./data/your_aoi_shape.shp', './download', date(2022, 1, 1), date(2022, 3, 1), 
+                                            coverage=50, intersect_exact=False, override=False)
+```
 
 ## Changelog
 

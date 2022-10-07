@@ -4,10 +4,9 @@ import requests
 import os
 import geopandas as gpd
 
-from pbasemap.mosaic_metadata import get_file_mosaic_quads_metadata
+from pbasemap.mosaic.metadata import get_file_mosaic_quads_metadata
 
 PL_API_KEY = os.getenv('PL_API_KEY', '')
-PL_API_MOSAIC_URL = 'https://api.planet.com/basemaps/v1/mosaics/'
 
 
 def download_mosaic_quads(quads_dataset, output, override=False):
