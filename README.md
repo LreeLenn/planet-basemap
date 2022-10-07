@@ -1,6 +1,6 @@
 # Planet Mosaic Quads Download tool
 
-[![PyPI version](https://badge.fury.io/py/planet-basemap.svg)](https://badge.fury.io/py/pbasemap)
+[![PyPI version](https://badge.fury.io/py/planet-basemap.svg)](https://badge.fury.io/py/plent-basemap)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3255274.svg)](https://doi.org/10.5281/zenodo.3255274)
 
 Planet creates global monthly mosaics apart from creating mosaics at different frequencies, monthly 
