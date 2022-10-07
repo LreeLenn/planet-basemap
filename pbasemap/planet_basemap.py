@@ -27,11 +27,9 @@ import sys
 from datetime import datetime
 
 from geom_rbox import idl
-from mosaic_download import download
+from mosaic_download import download_aoi_file_mosaic_quads, download_list_mosaic_quads
 from mosaic_metadata import get_file_mosaic_quads_metadata
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
-pathway = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pathway)
+
 
 PL_API_KEY = os.getenv('PL_API_KEY', '')
 
@@ -39,18 +37,28 @@ PL_API_KEY = os.getenv('PL_API_KEY', '')
 def rbox_from_parser(args):
     idl(infile=args.geometry)
 
-
 def mosaic_list_from_parser(args):
     start_date = datetime.strptime(args.start, '%Y-%m-%d').date()
     end_date = datetime.strptime(args.end, '%Y-%m-%d').date()
     quads = get_file_mosaic_quads_metadata(args.geometry, start_date, end_date, args.coverage,
-                                           args.intersect_exact, args.api_key)
+                                          args.intersect_exact, args.api_key)
     quads.to_file(args.output)
     print(f"{quads.shape[0]} quads saved to file {args.output}")
 
 
 def download_mosaic_from_parser(args):
-    download(names=args.name, ids=None, idlist=args.idlist,infile=args.geometry,coverage=args.coverage,local=args.local)
+    if args.list and os.path.exists(args.list):
+        download_list_mosaic_quads(args.list, args.output, args.override)
+    elif args.geometry and os.path.exists(args.geometry):
+        if args.start and args.end:
+            start_date = datetime.strptime(args.start, '%Y-%m-%d').date()
+            end_date = datetime.strptime(args.end, '%Y-%m-%d').date()
+            download_aoi_file_mosaic_quads(args.geometry, args.output, start_date, end_date, args.coverage,
+                                           args.intersect_exact, args.override, args.api_key)
+        else:
+            print("Missing parameters!")
+    else:
+        print("Please specify either a geometry or a mosaic list valid filepath.")
 
 
 def main():
@@ -82,14 +90,22 @@ def main():
                                     default=PL_API_KEY)
     parser_mosaic_list.set_defaults(func=mosaic_list_from_parser)
     # Quad download parameters
-    parser_download = subparsers.add_parser('download', help='Download quad GeoTiffs choose from name or idlist')
-    parser_download.add_argument('--geometry',
-                                 help='Path to AOI geometry file (any supported by GDAL)')
-    parser_download.add_argument('--local', help='Local folder to download images')
-    optional_named = parser_download.add_argument_group('Optional named arguments')
-    optional_named.add_argument('--coverage', help="Choose minimum percentage coverage", default=0)
-    optional_named.add_argument('--name', help='Mosaic name from earlier search or csvfile', default=None)
-    optional_named.add_argument('--id_list', help="Mosaic list csvfile", default=None, required=False)
+    parser_download = subparsers.add_parser('download', help='Download quad GeoTiffs choose for given geometry or list')
+    parser_download.add_argument('--geometry', help='Path to AOI geometry file (any supported by GDAL)',
+                                 default=None, required=False)
+    parser_download.add_argument('--list', help="Mosaic list where results from list command where saved",
+                                 default=None, required=False)
+    parser_download.add_argument('--start', help='Choose Start date in format YYYY-MM-DD', required=False)
+    parser_download.add_argument('--end', help='Choose End date in format YYYY-MM-DD', required=False)
+    parser_download.add_argument('--coverage', help="Choose minimum percentage coverage", default=0)
+    parser_download.add_argument('--intersect_exact', action='store_true', required=False,
+                                 help='Filter quads that intersects with AOI. If not given quads for '
+                                      'entire AOI bounding box are returned.')
+    parser_download.add_argument('--override', action='store_true', required=False,
+                                 help='To override already downloaded quads.')
+    parser_download.add_argument('--output', help='Local folder where downloaded data will be stored')
+    parser_download.add_argument('--api_key', help='Planet API key. Also can be set as PL_API_KEY env var.',
+                                    default=PL_API_KEY)
     parser_download.set_defaults(func=download_mosaic_from_parser)
 
     args = parser.parse_args()
@@ -97,11 +113,8 @@ def main():
     try:
         args.func(args)
     except AttributeError as e:
-        print('You must provide a function. Try "list" or "download"')
+        print(f'You must provide a function. Try "list" or "download". Error {e}')
 
 
 if __name__ == '__main__':
     main()
-
-
-

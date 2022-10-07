@@ -1,5 +1,6 @@
-# Planet-Mosaic-Quads-Download-CLI
-[![PyPI version](https://badge.fury.io/py/pbasemap.svg)](https://badge.fury.io/py/pbasemap)
+# Planet Mosaic Quads Download tool
+
+[![PyPI version](https://badge.fury.io/py/planet-basemap.svg)](https://badge.fury.io/py/pbasemap)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3255274.svg)](https://doi.org/10.5281/zenodo.3255274)
 
 Planet creates global monthly mosaics apart from creating mosaics at different frequencies, monthly 
@@ -22,69 +23,79 @@ http://doi.org/10.5281/zenodo.3255274
 ## Table of contents
 * [Installation](#installation)
 * [Getting started](#getting-started)
-* [pbasemap Planet Mosaic Quads Download CLI](#pbasemap-planet-mosaic-quads-download-cli)
+* [planet_basemap CLI tool](#planet_basemap CLI tool)
     * [bounding box](#bounding-box)
-    * [mosaic list](#mosaic-list)
-    * [download mosaic](#download-mosaic)
-    * [multipart download mosaic](#multipart-download-mosaic)
-    * [shape to geojson](#shape-to-geojson)
+    * [list](#list)
+    * [download](#download)
+* [Python usage](#python-usage)
 
 ## Installation
-** Install Fiona and GDAL for windows using the whl files [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/)** if there are any issues during installation.
+** Install Fiona and GDAL for windows using the whl files [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/)** if 
+there are any issues during installation.
 
-This assumes that you have native python & pip installed in your system, you can test this by going to the terminal (or windows command prompt) and trying
+This assumes that you have native python & pip installed in your system, you can test this by going to the 
+terminal (or windows command prompt) and trying:
 
 ```python``` and then ```pip list```
 
-If you get no errors and you have python 2.7.14 or higher you should be good to go. Please note that I have tested this only on python 2.7.15 but it should run on python 3.
+If you get no errors and you have python 3.5 or higher you should be good to go.
 
 To install **pbasemap: Planet Mosaic Quads Download CLI** you can install using two methods
 
-```pip install pbasemap```
+```pip install planet-basemap```
 
 or you can also try
 
 ```
-git clone https://github.com/samapriya/Planet-Mosaic-Quads-Download-CLI.git
-cd pbasemap
+git clone https://github.com/SatAgro/planet-basemaps.git
+cd planet-basemaps
 python setup.py install
 ```
-For **linux use sudo and for windows right click the command prompt and run as admin**.
 
-Installation is an optional step; the application can be also run directly by executing pbasemap.py script. The advantage of having it installed is being able to execute ppipe as any command line tool. I recommend installation within virtual environment. If you don't want to install, browse into the pbasemap folder and try ```python pbasemap.py``` to get to the same result.
+Installation is an optional step; the application can be also run directly by executing planet_basemap.py 
+script. The advantage of having it installed is being able to execute ppipe as any command line tool. 
+I recommend installation within virtual environment. If you don't want to install, browse into the 
+pbasemap folder and try ```python plabet_basemap.py``` to get to the same result.
 
+To avoid introducing `--api_key` option for each command you can setup `PL_API_KEY` environment variable.
 
 ## Getting started
 
 As usual, to print help:
 
 ```
-usage: pbasemap.py [-h] {rbox,mosaic_list,download,mpdownload,shp2geojson} ...
+usage: planet_basemap.py [-h] {rbox, list, download} ...
 
 Planet Mosaic Quads Download CLI
 
 positional arguments:
-  {rbox,mosaic_list,download,mpdownload,shp2geojson}
+  {rbox , list, download}
     rbox                Prints bounding box for geometry
-    mosaic_list         Tool to get Mosaic & Bounding Box list
+    list                Tool to get Mosaic Quads with Bounding Boxes and other metadata.
     download            Download quad GeoTiffs choose from name or idlist
-    mpdownload          Download quad GeoTiffs using multipart downloader
-    shp2geojson         Convert all shapefiles in folder to GeoJSON
 
 optional arguments:
   -h, --help            show this help message and exit
   ```
 
-To obtain help for a specific functionality, simply call it with _help_ switch, e.g.: `pbasemap shp2geojson -h`. If you didn't install pbasemap, then you can run it just by going to *pbasemap* directory and running `python pbasemap.py [arguments go here]`
+To obtain help for a specific functionality, simply call it with _help_ switch, e.g.: `planet_basemap list -h`. 
+If you didn't install pbasemap, then you can run it just by going to *pbasemap* directory and 
+running `python planet_basemap.py [arguments go here]`
 
-## pbasemap Simple CLI for Basemaps API
-The tool allows you to list and download basemap quads that instersect with area of interest, and have controls such as date range and check for final coverage before download. The CLI also allows you to export the mosaics list as needed and can handle GeoJSON and KML files, and includes a tool to convert shapefiles to GeoJSON files for use with this tool.
+## CLI tool
+
+The tool allows you to list and download basemap quads that instersect with area of interest, and have 
+controls such as date range and check for final coverage before download. The CLI also allows you to export 
+the mosaics list as needed and can handle GeoJSON and KML files, and includes a tool to convert shapefiles 
+to GeoJSON files for use with this tool.
 
 ### bounding box
-This tool simply prints the bounding box for any geometry feature that is passed. This is useful if you are using the planet CLI to downlaod quads which requires a bounding box.It prints out the bounding box for use.
+
+This tool simply prints the bounding box for any geometry feature that is passed. This is useful if you are 
+using the planet CLI to downlaod quads which requires a bounding box.It prints out the bounding box for use.
 
 ```
-usage: pbasemap.py rbox [-h] [--geometry GEOMETRY]
+usage: planet_basemap.py rbox [-h] [--geometry GEOMETRY]
 
 optional arguments:
   -h, --help           show this help message and exit
@@ -92,58 +103,61 @@ optional arguments:
 
 ```
 
-### mosaic list
-This tool exports the mosaics name, id that intersect with your bounding box for your geometry. This can then be used to download the quads.
+### list
+
+This tool exports the mosaics name, id that intersect with your bounding box for your geometry. This can then 
+be used to download the quads.
 
 ```
-usage: pbasemap.py mosaic_list [-h] [--geometry GEOMETRY] [--start START]
-                               [--end END] [--output OUTPUT]
+usage: planet_basemap.py list [-h] --geometry GEOMETRY --start START --end END [--coverage COVERAGE] 
+                              [--intersect_exact] --output OUTPUT [--api_key API_KEY]
 
-optional arguments:
+
+arguments:
   -h, --help           show this help message and exit
-  --geometry GEOMETRY  Choose a geometry file supports GeoJSON, KML
+  --geometry GEOMETRY  Path to AOI geometry file (any supported by GDAL)
   --start START        Choose Start date in format YYYY-MM-DD
   --end END            Choose End date in format YYYY-MM-DD
+  --coverage COVERAGE  Optional. Choose minimum percentage coverage. Default: 0
+  --intersect_exact    Optional. Filter quads that intersects with AOI. If not given quads for entire AOI bounding box are returned.
   --output OUTPUT      Full path where you want your mosaic list exported
+  --api_key API_KEY    Planet API key. Also can be set as PL_API_KEY env var.
+
 ```
 
 ### download mosaic
-As the name suggests this downloads your mosaic to the local folder you specify, you can specify how much coverage you want over your geometry and over the quad. So you may decide to only download those mosaic quads that have coverage more than 90% by simply specifying ```--coverage 90``` in the arguments. Once you create the list of mosaics that intersect with your geometry, you should be able to use the idlist option to export them all. Since L15 qauds can have the same name, the name of the mosaic is prepended to the filename.
+
+As the name suggests this downloads your mosaic to the local folder you specify, you can specify how much 
+coverage you want over your geometry and over the quad. So you may decide to only download those mosaic 
+quads that have coverage more than 90% by simply specifying ```--coverage 90``` in the arguments. 
+Once you create the list of mosaics that intersect with your geometry, you should be able to use the 
+idlist option to export them all.
 
 ```
-usage: pbasemap.py download [-h] [--geometry GEOMETRY] [--local LOCAL]
-                            [--coverage COVERAGE] [--name NAME]
-                            [--idlist IDLIST]
+usage: planet_basemap.py download [-h] [--geometry GEOMETRY] [--list LIST] [--start START] [--end END] 
+                                  [--coverage COVERAGE] [--intersect_exact] [--override] [--output OUTPUT] 
+                                  [--api_key API_KEY]
 
-optional arguments:
+options:
   -h, --help           show this help message and exit
-  --geometry GEOMETRY  Choose a geometry file supports GeoJSON, KML
-  --local LOCAL        Local folder to download images
-
-Optional named arguments:
+  --geometry GEOMETRY  Path to AOI geometry file (any supported by GDAL)
+  --list LIST          Mosaic list where results from list command where saved
+  --start START        Choose Start date in format YYYY-MM-DD
+  --end END            Choose End date in format YYYY-MM-DD
   --coverage COVERAGE  Choose minimum percentage coverage
-  --name NAME          Mosaic name from earlier search or csvfile
-  --idlist IDLIST      Mosaic list csvfile
-```
-
-### multipart download mosaic
-This uses a multipart downloader to download your mosaic to the local folder you specify, you can specify how much coverage you want over your geometry and over the quad. So you may decide to only download those mosaic quads that have coverage more than 90% by simply specifying ```--coverage 90``` in the arguments.Once you create the list of mosaics that intersect with your geometry, you should be able to use the idlist option to export them all. Since L15 qauds can have the same name, the name of the mosaic is prepended to the filename.
+  --intersect_exact    Filter quads that intersects with AOI. If not given quads for entire AOI bounding box are returned.
+  --override           To override already downloaded quads.
+  --output OUTPUT      Local folder where downloaded data will be stored
+  --api_key API_KEY    Planet API key. Also can be set as PL_API_KEY env var.
 
 ```
-usage: pbasemap.py mpdownload [-h] [--geometry GEOMETRY] [--local LOCAL]
-                              [--coverage COVERAGE] [--name NAME]
-                              [--idlist IDLIST]
 
-optional arguments:
-  -h, --help           show this help message and exit
-  --geometry GEOMETRY  Choose a geometry file supports GeoJSON, KML, Shape, etc.
-  --local LOCAL        Local folder to download images
 
-Optional named arguments:
-  --coverage COVERAGE  Choose minimum percentage coverage
-  --name NAME          Mosaic name from earlier search or csvfile
-  --idlist IDLIST      Mosaic list csvfile
-```
+## Python usage
+
+You can also call directly base map mosaic quad list and download functions in you python code.
+Bellow you can find an example that lists and download quad data.
+
 
 
 ## Changelog

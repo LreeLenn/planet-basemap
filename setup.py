@@ -16,17 +16,20 @@ setuptools.setup(
     name='planet-basemap',
     version='1.0.0',
     packages=find_packages(),
-    url='https://github.com/SatAgro/Planet-Mosaic-Quads-Download-CLI',
-    install_requires=['requests>=2.19.1',
-    'planet>=1.2.1',
-    'psutil>=5.4.5',
-    'retrying>=1.3.3',
-    'geopandas>=0.11.1'],
+    url='https://github.com/SatAgro/planet-basemap',
+    install_requires=[
+        'requests>=2.19.1',
+        'planet>=1.2.1',
+        'psutil>=5.4.5',
+        'retrying>=1.3.3',
+        'geopandas>=0.11.1',
+        'rtree>=1.0.0'
+    ],
     license='Apache 2.0',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     classifiers=(
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
@@ -41,7 +44,7 @@ setuptools.setup(
     description='Tool to download Planet Monthly Mosaic Quads',
     entry_points={
         'console_scripts': [
-            'pbasemap=pbasemap.pbasemap:main',
+            'plane_basemap=pbasemap.plane_basemap:main',
         ],
     },
 )
