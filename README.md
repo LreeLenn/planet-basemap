@@ -169,8 +169,8 @@ Bellow you can find an example that lists and download quad data. For more docum
 
 ```python
 from datetime import date
-from pbasemap.mosaic.download import download_mosaic_quads
-from pbasemap.mosaic.metadata import get_file_mosaic_quads_metadata
+from planet_basemap.mosaic.download import download_mosaic_quads
+from planet_basemap.mosaic.metadata import get_file_mosaic_quads_metadata
 
 quads = get_file_mosaic_quads_metadata('./data/test_aoi_01.geojson', date(2022, 1, 1), date(2022, 3, 1))
 # Do some staff (e.g. filter) with your quads and then download
@@ -182,13 +182,18 @@ Or just in one step:
 
 ```python
 from datetime import date
-from pbasemap.mosaic.download import download_aoi_file_mosaic_quads
+from planet_basemap.mosaic.download import download_aoi_file_mosaic_quads
 
 down_files = download_aoi_file_mosaic_quads('./data/your_aoi_shape.shp', './download', date(2022, 1, 1), date(2022, 3, 1), 
                                             coverage=50, intersect_exact=False, override=False)
 ```
 
 ## Changelog
+
+### v1.0.1
+
+- Renamed package to `planet_basemap` to avoid conflicts with legacy versions
+- Improved docs and tests.
 
 ### v1.0.0
 

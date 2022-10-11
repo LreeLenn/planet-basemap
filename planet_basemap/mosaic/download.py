@@ -4,7 +4,7 @@ import requests
 import os
 import geopandas as gpd
 
-from pbasemap.mosaic.metadata import get_file_mosaic_quads_metadata
+from planet_basemap.mosaic.metadata import get_file_mosaic_quads_metadata
 
 PL_API_KEY = os.getenv('PL_API_KEY', '')
 

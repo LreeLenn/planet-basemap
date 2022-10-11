@@ -2,6 +2,8 @@ import setuptools
 from setuptools import find_packages
 from distutils.version import StrictVersion
 from setuptools import __version__ as setuptools_version
+from planet_basemap import __version__ as planet_basemap_version
+from planet_basemap import __email__, __author__
 
 if StrictVersion(setuptools_version) < StrictVersion('38.3.0'):
     raise SystemExit(
@@ -13,8 +15,8 @@ def readme():
     with open('README.md') as f:
         return f.read()
 setuptools.setup(
-    name='planet-basemap',
-    version='1.0.0',
+    name='planet_basemap',
+    version=planet_basemap_version,
     packages=find_packages(),
     url='https://github.com/SatAgro/planet-basemap',
     install_requires=[
@@ -39,12 +41,12 @@ setuptools.setup(
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: GIS',
     ),
-    author='Krzysztof Stopa',
-    author_email='krzysztof.stopa@satagro.pl',
+    author=__author__,
+    author_email=__email__,
     description='Tool to download Planet Monthly Mosaic Quads',
     entry_points={
         'console_scripts': [
-            'planet_basemap=pbasemap.planet_basemap:main',
+            'planet_basemap=planet_basemap.planet_basemap:main',
         ],
     },
 )

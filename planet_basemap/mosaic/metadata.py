@@ -27,7 +27,6 @@ from datetime import datetime
 import pandas as pd
 import geopandas as gpd
 import requests
-import sys
 import pyproj
 from functools import partial
 from shapely.geometry import shape

@@ -4,8 +4,8 @@ import unittest
 
 from datetime import date
 
-from pbasemap.mosaic.download import download_aoi_file_mosaic_quads
-from pbasemap.mosaic.metadata import get_file_mosaic_quads_metadata
+from planet_basemap.mosaic.download import download_aoi_file_mosaic_quads
+from planet_basemap.mosaic.metadata import get_file_mosaic_quads_metadata
 
 CLEANUP = False
 
@@ -25,6 +25,15 @@ class TestMosaicMetadata(unittest.TestCase):
         mosaics_intersect = get_file_mosaic_quads_metadata('./data/test_aoi_01.geojson',
                                                            start_date, end_date, intersect_exact=True)
         self.assertGreater(quads.shape[0], mosaics_intersect.shape[0], "Intersecting quads should be less than bbox.")
+
+    def test_aoi_download_shape(self):
+        """
+        Test to get metadata and download geometry with multiple polygons in a shape file
+        """
+        self._test_environment()
+        start_date = date(2022, 1, 1)
+        end_date = date(2022, 3, 1)
+        # TODO
 
     def test_aoi_download(self):
         self._test_environment()
