@@ -69,7 +69,7 @@ def _handle_page(response, geom_main_bound, start, end, min_coverage=0, api_key=
             print('Error: empty bounding box!')
         elif mosaic_in_range:
             mosaic_id = mosaic['id']
-            r = requests.get('https://api.planet.com/basemaps/v1/mosaics/' + str(mosaic_id) + '/quads?bbox=' + str(
+            r = requests.get('https://api.planet.com/basemaps/v1/mosaics/' + str(mosaic_id) + '/quads?_page_size=1000&bbox=' + str(
                 gboundlist[0]) + '%2C' + gboundlist[1] + '%2C' + gboundlist[2] + '%2C' + gboundlist[3],
                              auth=(api_key, ''))
             resp = r.json()
@@ -135,7 +135,7 @@ def get_aoi_mosaic_quads_metadata(aoi_geom, start, end, coverage=0, api_key=PL_A
     quads = gpd.GeoDataFrame()
     gmainbound = (','.join(str(v) for v in list(aoi_geom.bounds)))
     print('rbox:' + str(gmainbound) + '\n')
-    r = requests.get('https://api.planet.com/basemaps/v1/mosaics', auth=(api_key, ''))
+    r = requests.get('https://api.planet.com/basemaps/v1/mosaics/?_page_size=1000', auth=(api_key, ''))
     response = r.json()
     if 'message' in response:
         raise PermissionError('No Download permission for: Error: ' + str(response['message']))
